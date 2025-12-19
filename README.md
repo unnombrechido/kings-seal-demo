@@ -26,8 +26,12 @@ Public domain / open source — feel free to fork, improve, or build on it.
 See the [original idea disclosure](https://github.com/unnombrechido/Kings_seal) for full background.
 
 
-**Live Interactive Demo** (no install):  
-https://jupyterlite.github.io/demo/repl/index.html?repo=https://github.com/unnombrechido/kings-seal-qr-trust-demo&path=notebooks/demo.ipynb
+# King's Seal QR Trust Prototype
+
+Interactive demo of the layered trust system for QR codes.
+
+**Live Interactive Demo** (runs in browser, no install):  
+https://jupyterlite.github.io/demo/repl/index.html?repo=https://github.com/unnombrechido/kings-seal-qr-trust-demo&path=demo.ipynb
 
 **Static View**:  
-https://nbviewer.org/github/unnombrechido/kings-seal-qr-trust-demo/blob/main/notebooks/demo.ipynb
+https://nbviewer.org/github/unnombrechido/kings-seal-qr-trust-demo/blob/main/demo.ipynb
