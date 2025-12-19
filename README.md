@@ -1,5 +1,5 @@
 # King's Seal QR Trust Prototype
-
+20205/12/19
 **A simple, secure way to make QR codes trustworthy — especially those with shortened URLs.**
 
 This prototype demonstrates the "King's Seal" concept:
