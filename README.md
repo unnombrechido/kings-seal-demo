@@ -1,6 +1,6 @@
 # King’s Seal QR Trust Demo
 
-** Patent Pending
+**Patent Pending**
 
 Live interactive prototype of the **King’s Seal** system.
 
