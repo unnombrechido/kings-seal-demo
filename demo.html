@@ -52,12 +52,12 @@
           <form>
             <div class="mb-3">
               <label for="issuer" class="form-label">Select Issuer</label>
-              <select id="issuer" class="form-select">
-                <option value="starbucks-official">Starbucks (starbucks-official)</option>
-                <option value="mcdonalds-official">McDonald's (mcdonalds-official)</option>
-                <option value="my-personal-site">My Personal Site (my-personal-site)</option>
-              </select>
-            </div>
+                <select id="issuer" class="form-select">
+                  <option value="coffee-shop-official">Coffee Shop (coffee-shop-official)</option>
+                  <option value="fast-food-official">Fast Food Chain (fast-food-official)</option>
+                  <option value="my-personal-site">My Personal Site (my-personal-site)</option>
+                </select>
+              </div>
             <div class="mb-3">
               <label for="payload" class="form-label">Enter URL or Text</label>
               <input type="text" id="payload" class="form-control" placeholder="Enter URL or text" value="https://bit.ly/starbucks-menu-2025">
@@ -104,11 +104,10 @@
   <script>
     // Registry secrets (same as Python version — for demo only)
     const registry = {
-      "starbucks-official": { secret: "super-secret-key-starbucks-2025", name: "Starbucks" },
-      "mcdonalds-official": { secret: "another-very-secret-key-mcd-2025", name: "McDonald's" },
+      "coffee-shop-official": { secret: "super-secret-key-coffee-2025", name: "Coffee Shop" },
+      "fast-food-official": { secret: "another-very-secret-key-food-2025", name: "Fast Food Chain" },
       "my-personal-site": { secret: "my-own-secret-for-testing-123", name: "My Personal Site" }
     };
-
     const SHORTENERS = ["bit.ly", "tinyurl.com", "t.co", "goo.gl", "buff.ly", "mcd.co"];
 
     function hasShortenedUrl(payload) {
