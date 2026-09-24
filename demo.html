@@ -84,14 +84,14 @@
             <div class="mb-3">
               <label for="issuer" class="form-label">Emitter (issuer)</label>
               <select id="issuer" class="form-select">
-                <option value="starbucks-official">Starbucks (starbucks-official)</option>
-                <option value="mcdonalds-official">McDonald's (mcdonalds-official)</option>
+                <option value="northside-coffee-official">Northside Coffee Co. (northside-coffee-official)</option>
+                <option value="riverbend-diner-official">Riverbend Diner (riverbend-diner-official)</option>
                 <option value="my-personal-site">My Personal Site (my-personal-site)</option>
               </select>
             </div>
             <div class="mb-3">
               <label for="payload" class="form-label">Readable message (URL or text)</label>
-              <input type="text" id="payload" class="form-control" placeholder="Enter URL or text" value="https://bit.ly/starbucks-menu-2025">
+              <input type="text" id="payload" class="form-control" placeholder="Enter URL or text" value="https://bit.ly/northside-menu-2025">
             </div>
             <button type="button" class="btn btn-success w-100" onclick="generateQR()">Generate sealed QR</button>
           </form>
@@ -149,11 +149,11 @@
   <script>
     // Demo-only secrets — must match kings-seal/registry.json
     const registry = {
-      "starbucks-official": { secret: "super-secret-key-starbucks-2025", name: "Starbucks" },
-      "mcdonalds-official": { secret: "another-very-secret-key-mcd-2025", name: "McDonald's" },
+      "northside-coffee-official": { secret: "demo-secret-northside-coffee-2025", name: "Northside Coffee Co." },
+      "riverbend-diner-official": { secret: "demo-secret-riverbend-diner-2025", name: "Riverbend Diner" },
       "my-personal-site": { secret: "my-own-secret-for-testing-123", name: "My Personal Site" }
     };
-    const SHORTENERS = ["bit.ly", "tinyurl.com", "t.co", "goo.gl", "buff.ly", "mcd.co"];
+    const SHORTENERS = ["bit.ly", "tinyurl.com", "t.co", "goo.gl", "buff.ly"];
 
     function escapeHtml(s) {
       return String(s)
