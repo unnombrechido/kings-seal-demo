@@ -12,21 +12,22 @@
     .section { padding: 60px 0; }
     .trusted { color: #27ae60; font-weight: bold; }
     .warning { color: orange; font-weight: bold; }
+    .danger { color: #c0392b; font-weight: bold; }
     footer { background-color: #2c3e50; color: white; padding: 20px 0; text-align: center; }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-      <a class="navbar-brand" href="#">King's Seal</a>
+      <a class="navbar-brand" href="index.html">King's Seal</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="#demo">Demo</a></li>
+          <li class="nav-item"><a class="nav-link" href="#verify">Verify</a></li>
           <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
         </ul>
@@ -34,16 +35,14 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
   <section class="hero">
     <div class="container">
       <h1 class="display-4">King's Seal QR Trust Prototype</h1>
-      <p class="lead">Patent Pending - A Hybrid Layered Trust System for Secure QR Code Scanning</p>
+      <p class="lead">Patent Pending — A Hybrid Layered Trust System for Secure QR Code Scanning</p>
       <a href="#demo" class="btn btn-primary btn-lg">Try the Demo</a>
     </div>
   </section>
 
-  <!-- Demo Section -->
   <section id="demo" class="section bg-white">
     <div class="container">
       <h2 class="text-center mb-5">Interactive Demo</h2>
@@ -52,12 +51,12 @@
           <form>
             <div class="mb-3">
               <label for="issuer" class="form-label">Select Issuer</label>
-                <select id="issuer" class="form-select">
-                  <option value="coffee-shop-official">Coffee Shop (coffee-shop-official)</option>
-                  <option value="fast-food-official">Fast Food Chain (fast-food-official)</option>
-                  <option value="my-personal-site">My Personal Site (my-personal-site)</option>
-                </select>
-              </div>
+              <select id="issuer" class="form-select">
+                <option value="starbucks-official">Starbucks (starbucks-official)</option>
+                <option value="mcdonalds-official">McDonald's (mcdonalds-official)</option>
+                <option value="my-personal-site">My Personal Site (my-personal-site)</option>
+              </select>
+            </div>
             <div class="mb-3">
               <label for="payload" class="form-label">Enter URL or Text</label>
               <input type="text" id="payload" class="form-control" placeholder="Enter URL or text" value="https://bit.ly/starbucks-menu-2025">
@@ -71,20 +70,34 @@
     </div>
   </section>
 
-  <!-- About Section -->
-  <section id="about" class="section bg-light">
+  <section id="verify" class="section bg-light">
+    <div class="container">
+      <h2 class="text-center mb-5">Verify a Sealed Payload</h2>
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="mb-3">
+            <label for="verifyInput" class="form-label">Paste sealed QR content</label>
+            <textarea id="verifyInput" class="form-control" rows="3" placeholder="seal:issuer-id|tag:16hex|payload"></textarea>
+          </div>
+          <button type="button" class="btn btn-primary w-100" onclick="verifyQR()">Verify Seal</button>
+          <div id="verifyStatus" class="mt-3 p-3 bg-white rounded"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section bg-white">
     <div class="container">
       <h2 class="text-center mb-5">About King's Seal</h2>
       <p class="text-center lead">At King’s Seal, we strive to create a secure environment for QR code users. Our mission is to protect individuals from phishing attacks and ensure that legitimate creators can share their content safely.</p>
-      <p class="text-center">Inspired by physical mail, King's Seal uses three layers of trust: Personal Trust, Official Seal, and Caution. No complex crypto for casual use—strong protection where it matters.</p>
+      <p class="text-center">Inspired by physical mail, King's Seal uses three layers of trust: Personal Trust, Official Seal, and Caution. Sealed codes use HMAC-SHA256 over the payload with the issuer secret (same as the Python disclosure).</p>
       <div class="text-center">
         <a href="https://github.com/unnombrechido/kings-seal" class="btn btn-outline-primary">Learn More on GitHub</a>
       </div>
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section id="contact" class="section bg-white">
+  <section id="contact" class="section bg-light">
     <div class="container">
       <h2 class="text-center mb-5">Contact Us</h2>
       <p class="text-center">For inquiries, partnerships, or feedback, reach out to us at:</p>
@@ -92,7 +105,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     <div class="container">
       <p>King’s Seal™ by Omar David Puente Trejo — December 2025. All rights reserved. © 2026</p>
@@ -102,23 +114,38 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
   <script>
-    // Registry secrets (same as Python version — for demo only)
+    // Demo-only secrets — must match kings-seal/registry.json
     const registry = {
-      "coffee-shop-official": { secret: "super-secret-key-coffee-2025", name: "Coffee Shop" },
-      "fast-food-official": { secret: "another-very-secret-key-food-2025", name: "Fast Food Chain" },
+      "starbucks-official": { secret: "super-secret-key-starbucks-2025", name: "Starbucks" },
+      "mcdonalds-official": { secret: "another-very-secret-key-mcd-2025", name: "McDonald's" },
       "my-personal-site": { secret: "my-own-secret-for-testing-123", name: "My Personal Site" }
     };
-    const SHORTENERS = ["bit.ly", "tinyurl.com", "t.co", "goo.gl", "buff.ly", "mcd.co"];
+    const SHORTENERS = ["bit.ly", "tinyurl.com", "t.co", "goo.gl", "buff.ly", "mcd.co", "tinyurl.com"];
 
     function hasShortenedUrl(payload) {
       return SHORTENERS.some(short => payload.toLowerCase().includes(short));
     }
 
-    async function sha256(message) {
-      const msgBuffer = new TextEncoder().encode(message);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    async function hmacSha256Hex(secret, message) {
+      const enc = new TextEncoder();
+      const key = await crypto.subtle.importKey(
+        "raw",
+        enc.encode(secret),
+        { name: "HMAC", hash: "SHA-256" },
+        false,
+        ["sign"]
+      );
+      const sig = await crypto.subtle.sign("HMAC", key, enc.encode(message));
+      return Array.from(new Uint8Array(sig))
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    async function makeTag(issuerId, payload) {
+      const entry = registry[issuerId];
+      if (!entry) return null;
+      const hex = await hmacSha256Hex(entry.secret, payload);
+      return hex.substring(0, 16);
     }
 
     async function generateQR() {
@@ -132,16 +159,10 @@
         return;
       }
 
-      const secret = registry[issuer].secret;
-      const hash = await sha256(payload);
-      const tag = hash.substring(0, 16);
-
+      const tag = await makeTag(issuer, payload);
       const qrContent = `seal:${issuer}|tag:${tag}|${payload}`;
 
-      // Clear previous QR
       qrcodeDiv.innerHTML = "";
-
-      // Generate QR
       new QRCode(qrcodeDiv, {
         text: qrContent,
         width: 300,
@@ -150,14 +171,53 @@
         colorLight: "#ffffff"
       });
 
-      // Status
-      const shortMsg = hasShortenedUrl(payload) ? " <span class='warning'>(Shortened URL — seal enforced!)</span>" : "";
+      const shortMsg = hasShortenedUrl(payload)
+        ? " <span class='warning'>(Shortened URL — seal enforced!)</span>"
+        : "";
       status.innerHTML = `
         <div class="trusted">Sealed QR Generated for ${registry[issuer].name}${shortMsg}</div>
         <p><b>Payload:</b> ${payload}</p>
         <p><small>Full sealed content: ${qrContent}</small></p>
-        <p class="trusted">Verification: Trusted (tag matched)</p>
+        <p class="trusted">Tag: HMAC-SHA256(secret, payload)[:16]</p>
       `;
+
+      document.getElementById("verifyInput").value = qrContent;
+    }
+
+    async function verifyQR() {
+      const raw = document.getElementById("verifyInput").value.trim();
+      const out = document.getElementById("verifyStatus");
+
+      if (!raw.startsWith("seal:")) {
+        out.innerHTML = "<span class='danger'>Untrusted — no seal prefix</span>";
+        return;
+      }
+
+      const parts = raw.split("|", 3);
+      if (parts.length !== 3) {
+        out.innerHTML = "<span class='danger'>Untrusted — invalid format</span>";
+        return;
+      }
+
+      const issuerId = parts[0].slice("seal:".length);
+      const providedTag = parts[1].startsWith("tag:") ? parts[1].slice("tag:".length) : "";
+      const payload = parts[2];
+
+      if (!registry[issuerId]) {
+        out.innerHTML = "<span class='danger'>Untrusted — unknown issuer</span>";
+        return;
+      }
+
+      const expected = await makeTag(issuerId, payload);
+      if (expected === providedTag) {
+        out.innerHTML = `
+          <div class="trusted">Trusted — Official Seal</div>
+          <p><b>Issuer:</b> ${registry[issuerId].name}</p>
+          <p><b>Payload:</b> ${payload}</p>
+        `;
+      } else {
+        out.innerHTML = "<span class='danger'>Untrusted — invalid tag (possible tampering)</span>";
+      }
     }
   </script>
 </body>
