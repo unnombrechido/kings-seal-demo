@@ -11,9 +11,14 @@
     .hero { background-color: #2c3e50; color: white; padding: 60px 0; text-align: center; }
     .section { padding: 60px 0; }
     .trusted { color: #27ae60; font-weight: bold; }
-    .warning { color: orange; font-weight: bold; }
+    .unknown { color: #d68910; font-weight: bold; }
+    .tampered { color: #c0392b; font-weight: bold; }
+    .warning { color: #d68910; font-weight: bold; }
     .danger { color: #c0392b; font-weight: bold; }
+    .state-card { border-radius: 8px; padding: 1rem; height: 100%; background: #fff; border: 1px solid #dee2e6; }
+    .state-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
     footer { background-color: #2c3e50; color: white; padding: 20px 0; text-align: center; }
+    #qrcode img { margin: 0 auto; }
   </style>
 </head>
 <body>
@@ -38,19 +43,46 @@
   <section class="hero">
     <div class="container">
       <h1 class="display-4">King's Seal QR Trust Prototype</h1>
-      <p class="lead">Patent Pending — A Hybrid Layered Trust System for Secure QR Code Scanning</p>
+      <p class="lead">Protect the emitter. Keep the message readable. Stop deceptive QR codes from wearing your name.</p>
+      <p class="mb-4">Patent Pending — authenticity for issuers, not encryption of the payload.</p>
       <a href="#demo" class="btn btn-primary btn-lg">Try the Demo</a>
     </div>
   </section>
 
-  <section id="demo" class="section bg-white">
+  <section class="section bg-white py-4">
     <div class="container">
-      <h2 class="text-center mb-5">Interactive Demo</h2>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="state-card">
+            <h3 class="trusted">Trusted</h3>
+            <p class="mb-0">Seal matches a known issuer. This exact readable message was authorized by that emitter — safe to treat as regulated.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="state-card">
+            <h3 class="unknown">Unknown</h3>
+            <p class="mb-0">No seal, or an issuer you do not recognize. The message is still visible; it is simply not vouched for by a known emitter.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="state-card">
+            <h3 class="tampered">Tampered</h3>
+            <p class="mb-0">Looks sealed, but the tag does not match. Someone may have altered the payload after sealing — do not trust it as that emitter.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="demo" class="section bg-light">
+    <div class="container">
+      <h2 class="text-center mb-3">Issue a sealed QR</h2>
+      <p class="text-center text-muted mb-5">The payload stays cleartext. The seal only proves you authorized it.</p>
       <div class="row justify-content-center">
         <div class="col-md-8">
           <form>
             <div class="mb-3">
-              <label for="issuer" class="form-label">Select Issuer</label>
+              <label for="issuer" class="form-label">Emitter (issuer)</label>
               <select id="issuer" class="form-select">
                 <option value="starbucks-official">Starbucks (starbucks-official)</option>
                 <option value="mcdonalds-official">McDonald's (mcdonalds-official)</option>
@@ -58,56 +90,57 @@
               </select>
             </div>
             <div class="mb-3">
-              <label for="payload" class="form-label">Enter URL or Text</label>
+              <label for="payload" class="form-label">Readable message (URL or text)</label>
               <input type="text" id="payload" class="form-control" placeholder="Enter URL or text" value="https://bit.ly/starbucks-menu-2025">
             </div>
-            <button type="button" class="btn btn-success w-100" onclick="generateQR()">Generate Sealed QR</button>
+            <button type="button" class="btn btn-success w-100" onclick="generateQR()">Generate sealed QR</button>
           </form>
           <div id="qrcode" class="mt-4 text-center"></div>
-          <div id="status" class="mt-3 p-3 bg-light rounded"></div>
+          <div id="status" class="mt-3 p-3 bg-white rounded"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="verify" class="section bg-light">
+  <section id="verify" class="section bg-white">
     <div class="container">
-      <h2 class="text-center mb-5">Verify a Sealed Payload</h2>
+      <h2 class="text-center mb-3">Check a scanned seal</h2>
+      <p class="text-center text-muted mb-5">Ask: did this emitter authorize this exact message?</p>
       <div class="row justify-content-center">
         <div class="col-md-8">
           <div class="mb-3">
             <label for="verifyInput" class="form-label">Paste sealed QR content</label>
-            <textarea id="verifyInput" class="form-control" rows="3" placeholder="seal:issuer-id|tag:16hex|payload"></textarea>
+            <textarea id="verifyInput" class="form-control" rows="3" placeholder="seal:issuer-id|tag:16hex|readable-payload"></textarea>
           </div>
-          <button type="button" class="btn btn-primary w-100" onclick="verifyQR()">Verify Seal</button>
-          <div id="verifyStatus" class="mt-3 p-3 bg-white rounded"></div>
+          <button type="button" class="btn btn-primary w-100" onclick="verifyQR()">Check seal</button>
+          <div id="verifyStatus" class="mt-3 p-3 bg-light rounded"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="about" class="section bg-white">
+  <section id="about" class="section bg-light">
     <div class="container">
       <h2 class="text-center mb-5">About King's Seal</h2>
-      <p class="text-center lead">At King’s Seal, we strive to create a secure environment for QR code users. Our mission is to protect individuals from phishing attacks and ensure that legitimate creators can share their content safely.</p>
-      <p class="text-center">Inspired by physical mail, King's Seal uses three layers of trust: Personal Trust, Official Seal, and Caution. Sealed codes use HMAC-SHA256 over the payload with the issuer secret (same as the Python disclosure).</p>
+      <p class="text-center lead">King's Seal is not about hiding the message. It is about regulating who can put an official name on a QR code, so emitters are not blamed for deceptive or inconvenient links they never sent.</p>
+      <p class="text-center">Three layers, like physical mail: personal trust, official seal, and caution for everything else. The payload stays readable. The HMAC tag only answers one question — did this issuer authorize this exact content?</p>
       <div class="text-center">
-        <a href="https://github.com/unnombrechido/kings-seal" class="btn btn-outline-primary">Learn More on GitHub</a>
+        <a href="https://github.com/unnombrechido/kings-seal" class="btn btn-outline-primary">Learn more on GitHub</a>
       </div>
     </div>
   </section>
 
-  <section id="contact" class="section bg-light">
+  <section id="contact" class="section bg-white">
     <div class="container">
-      <h2 class="text-center mb-5">Contact Us</h2>
-      <p class="text-center">For inquiries, partnerships, or feedback, reach out to us at:</p>
+      <h2 class="text-center mb-5">Contact</h2>
+      <p class="text-center">For inquiries, partnerships, or feedback:</p>
       <p class="text-center fs-4"><a href="mailto:contactus@kingssealqr.com">contactus@kingssealqr.com</a></p>
     </div>
   </section>
 
   <footer>
     <div class="container">
-      <p>King’s Seal™ by Omar David Puente Trejo — December 2025. All rights reserved. © 2026</p>
+      <p>King's Seal™ by Omar David Puente Trejo — December 2025. All rights reserved. © 2026</p>
     </div>
   </footer>
 
@@ -120,7 +153,15 @@
       "mcdonalds-official": { secret: "another-very-secret-key-mcd-2025", name: "McDonald's" },
       "my-personal-site": { secret: "my-own-secret-for-testing-123", name: "My Personal Site" }
     };
-    const SHORTENERS = ["bit.ly", "tinyurl.com", "t.co", "goo.gl", "buff.ly", "mcd.co", "tinyurl.com"];
+    const SHORTENERS = ["bit.ly", "tinyurl.com", "t.co", "goo.gl", "buff.ly", "mcd.co"];
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
 
     function hasShortenedUrl(payload) {
       return SHORTENERS.some(short => payload.toLowerCase().includes(short));
@@ -155,7 +196,7 @@
       const qrcodeDiv = document.getElementById("qrcode");
 
       if (!payload) {
-        status.innerHTML = "<span class='warning'>Please enter a payload</span>";
+        status.innerHTML = "<span class='warning'>Enter a readable message first</span>";
         return;
       }
 
@@ -172,30 +213,43 @@
       });
 
       const shortMsg = hasShortenedUrl(payload)
-        ? " <span class='warning'>(Shortened URL — seal enforced!)</span>"
+        ? " <span class='warning'>Shortened URL — seal is required for this kind of link.</span>"
         : "";
       status.innerHTML = `
-        <div class="trusted">Sealed QR Generated for ${registry[issuer].name}${shortMsg}</div>
-        <p><b>Payload:</b> ${payload}</p>
-        <p><small>Full sealed content: ${qrContent}</small></p>
-        <p class="trusted">Tag: HMAC-SHA256(secret, payload)[:16]</p>
+        <div class="trusted">Sealed for emitter: ${escapeHtml(registry[issuer].name)}</div>
+        <p class="mb-1"><b>Readable payload (not hidden):</b> ${escapeHtml(payload)}</p>
+        <p class="mb-1"><small>Full sealed content: ${escapeHtml(qrContent)}</small></p>
+        <p class="mb-0 text-muted">Anyone can read the message. Only this emitter’s secret can produce a matching tag.${shortMsg}</p>
       `;
 
       document.getElementById("verifyInput").value = qrContent;
+      document.getElementById("verifyStatus").innerHTML =
+        "<span class='text-muted'>Sealed content loaded below — click Check seal, or edit the payload to simulate tampering.</span>";
     }
 
     async function verifyQR() {
       const raw = document.getElementById("verifyInput").value.trim();
       const out = document.getElementById("verifyStatus");
 
+      if (!raw) {
+        out.innerHTML = "<span class='unknown'>Unknown — nothing to check</span>";
+        return;
+      }
+
       if (!raw.startsWith("seal:")) {
-        out.innerHTML = "<span class='danger'>Untrusted — no seal prefix</span>";
+        out.innerHTML = `
+          <div class="unknown">Unknown — no official seal</div>
+          <p class="mb-0">The message may still be readable, but no emitter is vouching for it. Treat with caution.</p>
+        `;
         return;
       }
 
       const parts = raw.split("|", 3);
       if (parts.length !== 3) {
-        out.innerHTML = "<span class='danger'>Untrusted — invalid format</span>";
+        out.innerHTML = `
+          <div class="unknown">Unknown — seal format not recognized</div>
+          <p class="mb-0">Expected <code>seal:issuer|tag:…|readable-payload</code>.</p>
+        `;
         return;
       }
 
@@ -204,19 +258,27 @@
       const payload = parts[2];
 
       if (!registry[issuerId]) {
-        out.innerHTML = "<span class='danger'>Untrusted — unknown issuer</span>";
+        out.innerHTML = `
+          <div class="unknown">Unknown — issuer not in your trust list</div>
+          <p class="mb-1"><b>Claimed issuer id:</b> ${escapeHtml(issuerId)}</p>
+          <p class="mb-0"><b>Readable payload:</b> ${escapeHtml(payload)}</p>
+        `;
         return;
       }
 
       const expected = await makeTag(issuerId, payload);
       if (expected === providedTag) {
         out.innerHTML = `
-          <div class="trusted">Trusted — Official Seal</div>
-          <p><b>Issuer:</b> ${registry[issuerId].name}</p>
-          <p><b>Payload:</b> ${payload}</p>
+          <div class="trusted">Trusted — this emitter authorized this exact message</div>
+          <p class="mb-1"><b>Emitter:</b> ${escapeHtml(registry[issuerId].name)}</p>
+          <p class="mb-0"><b>Readable payload:</b> ${escapeHtml(payload)}</p>
         `;
       } else {
-        out.innerHTML = "<span class='danger'>Untrusted — invalid tag (possible tampering)</span>";
+        out.innerHTML = `
+          <div class="tampered">Tampered — seal does not match the message</div>
+          <p class="mb-1">This looks like ${escapeHtml(registry[issuerId].name)}, but the tag is wrong. The payload may have been changed after sealing.</p>
+          <p class="mb-0"><b>Readable payload shown:</b> ${escapeHtml(payload)}</p>
+        `;
       }
     }
   </script>
